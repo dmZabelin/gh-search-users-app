@@ -1,12 +1,12 @@
 import React from 'react';
 import './global.styles.scss';
-import { Layout } from './shared/Layout';
+import { HomePage } from './shared/HomePage';
 
 function App() {
 	return (
-		<Layout>
-			<div>test</div>
-		</Layout>
+		<div className="App">
+			<HomePage />
+		</div>
 	);
 }
 
