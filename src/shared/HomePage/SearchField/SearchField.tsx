@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './searchfield.module.scss';
-import { useDispatch } from 'react-redux';
-import { fetchUsersData } from '../../../store/reducers/usersDataSlice';
-import { AppDispatch } from '../../../store';
+import { clearUsers, fetchUsersData } from '../../../store/reducers/usersDataSlice';
+import { useAppDispatch } from '../../../store';
+import { IInputState, inputValue } from '../../../store/reducers/inputValueSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/rootReducer';
 
 export function SearchField() {
-	const dispatch = useDispatch<AppDispatch>();
-	const [value, setValue] = useState('');
+	const dispatch = useAppDispatch();
+	const { value } = useSelector<RootState, IInputState>(state => state.inputValue);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setValue(e.target.value);
-		dispatch(fetchUsersData(e.target.value));
+		const text = e.target.value;
+		dispatch(inputValue(text));
+		localStorage.setItem('val', text);
+		if (text.trim().length) {
+			dispatch(fetchUsersData(e.target.value));
+		} else {
+			dispatch(clearUsers());
+			localStorage.clear();
+		}
 	};
 
 	return (

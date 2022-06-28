@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@import "src/scss/var";
+
 body {
 	margin: 0;
+	font: 400 16px/1.5 'Roboto', sans-serif;
+	color: $m_color;
 }
 
 * {
@@ -14,4 +19,5 @@ ul {
 
 a {
 	text-decoration: none;
+	color: inherit;
 }

@@ -1,12 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { PER_PAGE } from '../const';
 
-type TItem = {
-	login: string;
-};
+let itemsDataStorage = localStorage.getItem('users');
+if (itemsDataStorage !== null) {
+	itemsDataStorage = JSON.parse(itemsDataStorage);
+}
 
-/*type TUserData = {
+export type TItem = {
+	login: string;
 	name: string;
+	id: string;
 	avatar_url: string;
 	bio: string;
 	email: string;
@@ -15,17 +18,17 @@ type TItem = {
 	followers: string;
 	following: string;
 	created_at: string;
-};*/
+};
 
-type TInitialState = {
-	items: Array<TItem>;
-	status: null | string;
+export type TInitialState = {
+	items: Array<any | TItem>;
+	loading: boolean;
 	error: null | string;
 };
 
 const initialState = {
-	items: [],
-	status: null,
+	items: !itemsDataStorage ? [] : itemsDataStorage,
+	loading: false,
 	error: null,
 } as TInitialState;
 
@@ -41,16 +44,15 @@ export const fetchUsersData = createAsyncThunk(
 			}
 			const data = await response.json();
 
-			return await Promise.all(
+			const usersData = await Promise.all(
 				data.items.map(async (item: TItem) => {
-					const response = await fetch(
-						`https://api.github.com/users/${item.login}`
-					);
-					if (!response.ok)
-						throw new TypeError('Request error (/users/{username})!');
+					const response = await fetch(`https://api.github.com/users/${item.login}`);
+					if (!response.ok) throw new TypeError('Request error (/users/{username})!');
 					const data = await response.json();
 					return {
+						login: data.login,
 						name: data.name,
+						id: data.node_id,
 						avatar_url: data.avatar_url,
 						bio: data.bio,
 						email: data.email,
@@ -62,6 +64,8 @@ export const fetchUsersData = createAsyncThunk(
 					};
 				})
 			);
+			localStorage.setItem('users', JSON.stringify(usersData));
+			return usersData;
 		} catch (error) {
 			if (!(error instanceof TypeError)) {
 				throw error;
@@ -74,22 +78,27 @@ export const fetchUsersData = createAsyncThunk(
 const userDataSlice = createSlice({
 	name: 'SET_USERS_DATA',
 	initialState,
-	reducers: {},
-	extraReducers: (builder) => {
+	reducers: {
+		clearUsers(state) {
+			state.items = [];
+		},
+	},
+	extraReducers: builder => {
 		builder
-			.addCase(fetchUsersData.pending, (state) => {
-				state.status = 'loading';
+			.addCase(fetchUsersData.pending, state => {
+				state.loading = true;
 				state.error = null;
 			})
 			.addCase(fetchUsersData.fulfilled, (state, action) => {
-				state.status = 'resolved';
+				state.loading = false;
 				state.items = action.payload;
 			})
 			.addCase(fetchUsersData.rejected, (state, action) => {
-				state.status = 'rejected';
+				state.loading = false;
 				state.error = action.payload as string;
 			});
 	},
 });
 
+export const { clearUsers } = userDataSlice.actions;
 export default userDataSlice.reducer;
