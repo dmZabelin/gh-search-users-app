@@ -1,0 +1,18 @@
+.notFound {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	span {
+		position: absolute;
+		top: 150px;
+		z-index: -1;
+		font-size: 250px;
+		opacity: .3;
+	}
+}
+.backLink {
+	color: darkblue;
+	font-weight: 600;
+}

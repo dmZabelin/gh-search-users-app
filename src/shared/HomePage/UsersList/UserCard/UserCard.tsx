@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './usercard.module.scss';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../../../store';
-import { fetchReposData } from '../../../../store/reducers/reposDataSlice';
 
 interface IUserCard {
 	avatar: string;
@@ -12,12 +10,6 @@ interface IUserCard {
 }
 
 export function UserCard({ avatar, name, repo, login }: IUserCard) {
-	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		dispatch(fetchReposData(login));
-	}, []);
-
 	return (
 		<li className={styles.userCard}>
 			<Link to={`/user/${login}`} className={styles.userCardLink}>

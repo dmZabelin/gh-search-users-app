@@ -32,4 +32,16 @@
 	&:not(:last-child) {
 		margin-bottom: 10px;
 	}
+	@media screen and (max-width: 450px) {
+		&Link {
+			flex-direction: column;
+		}
+		&Title {
+			margin-right: 0;
+			text-align: center;
+		}
+		&Img {
+			margin-bottom: 10px;
+		}
+	}
 }

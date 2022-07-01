@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './repoitem.module.scss';
 
 interface IRepoItem {
 	name: string;
@@ -7,10 +8,16 @@ interface IRepoItem {
 	url: string;
 }
 
-export function RepoItem({ name, url }: IRepoItem) {
+export function RepoItem({ name, url, forks, stars }: IRepoItem) {
 	return (
-		<li>
-			<a href={url}>{name}</a>
+		<li className={styles.repoItem}>
+			<a href={url}>
+				<h3>{name}</h3>
+			</a>
+			<div>
+				<p>{forks} Forks</p>
+				<p>{stars} Stars</p>
+			</div>
 		</li>
 	);
 }

@@ -1,7 +1,10 @@
-.userInfo {
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
+.userItem {
+	padding-top: 30px;
+	&Wrap {
+		margin-bottom: 30px;
+		display: flex;
+		align-items: flex-start;
+	}
 	&Avatar {
 		margin-right: 50px;
 		max-width: 250px;
@@ -10,6 +13,24 @@
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+		}
+	}
+	&Info {
+		p span {
+			font-weight: 500;
+		}
+	}
+	&Bio {
+		margin-bottom: 20px;
+		width: 100%;
+	}
+
+	@media screen and (max-width: 577px) {
+		&Wrap {
+			flex-direction: column;
+		}
+		&Avatar {
+			margin-right: 0;
 		}
 	}
 }
